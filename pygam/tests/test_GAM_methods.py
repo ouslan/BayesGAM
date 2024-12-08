@@ -75,7 +75,7 @@ def test_large_GAM(coal_X_y):
     gam = LinearGAM().fit(X, y)
     assert gam._is_fitted
 
-
+@pytest.mark.filterwarnings("ignore:KNOWN BUG")
 def test_summary(mcycle_X_y, mcycle_gam):
     """
     check that we can get a summary if we've fitted the model, else not
@@ -91,7 +91,7 @@ def test_summary(mcycle_X_y, mcycle_gam):
     mcycle_gam.summary()
     assert True
 
-
+@pytest.mark.filterwarnings("ignore:KNOWN BUG")
 def test_more_splines_than_samples(mcycle_X_y):
     """
     check that gridsearch returns the expected number of models
@@ -147,7 +147,7 @@ def test_conf_intervals_ordered(mcycle_X_y, mcycle_gam):
     conf_ints = mcycle_gam.confidence_intervals(X)
     assert (conf_ints[:, 0] <= conf_ints[:, 1]).all()
 
-
+@pytest.mark.filterwarnings("ignore:KNOWN BUG")
 def test_summary_returns_12_lines(mcycle_gam):
     """
     check that the summary method works and returns 24 lines like:
