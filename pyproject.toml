@@ -1,18 +1,16 @@
 [project]
 name = "pygam"
-version = "0.1.0"
-description = "Add your description here"
+version = "0.9.1"
+description = "pyGAM: Generalized Additive Models in Python"
 readme = "README.md"
+license = "Apache-2.0"
 requires-python = ">=3.12"
-dependencies = [
-    "mock>=5.1.0",
-    "numpy>=2.2.0",
-    "progressbar2>=4.5.0",
-    "scipy>=1.14.1",
-]
+dependencies = ["numpy>=2.2.0", "progressbar2>=4.5.0", "scipy>=1.14.1"]
+authors = [{ name = "Daniel Serven" }, { name = "Charlie Brummitt" }]
 
-[project.optional-dependencies]
-dev = [
-    "pandas>=2.2.3",
-    "pytest>=8.3.4",
-]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = ["pandas>=2.2.3", "pytest>=8.3.4"]
