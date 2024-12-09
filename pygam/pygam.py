@@ -9,7 +9,7 @@ import numpy as np
 import scipy as sp
 from scipy import stats  # noqa: F401
 import os
-os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "10" #  updatimizations
 
 b = sp.optimize.Bounds
 
