@@ -8,6 +8,10 @@ import warnings
 import numpy as np
 import scipy as sp
 from scipy import stats  # noqa: F401
+import os
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+
+b = sp.optimize.Bounds
 
 from pygam.core import Core
 
