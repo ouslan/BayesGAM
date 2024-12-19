@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from pygam import (
+from bayesgam import (
     LinearGAM,
     LogisticGAM,
     s,

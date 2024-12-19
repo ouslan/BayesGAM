@@ -13,69 +13,69 @@ os.environ["OPENBLAS_NUM_THREADS"] = "10" #  updatimizations
 
 b = sp.optimize.Bounds
 
-from pygam.core import Core
+from bayesgam.core import Core
 
-from pygam.penalties import derivative  # noqa: F401
-from pygam.penalties import l2  # noqa: F401
-from pygam.penalties import monotonic_inc  # noqa: F401
-from pygam.penalties import monotonic_dec  # noqa: F401
-from pygam.penalties import convex  # noqa: F401
-from pygam.penalties import concave  # noqa: F401
-from pygam.penalties import none  # noqa: F401
-from pygam.penalties import wrap_penalty  # noqa: F401
-from pygam.penalties import PENALTIES, CONSTRAINTS  # noqa: F401
+from bayesgam.penalties import derivative  # noqa: F401
+from bayesgam.penalties import l2  # noqa: F401
+from bayesgam.penalties import monotonic_inc  # noqa: F401
+from bayesgam.penalties import monotonic_dec  # noqa: F401
+from bayesgam.penalties import convex  # noqa: F401
+from bayesgam.penalties import concave  # noqa: F401
+from bayesgam.penalties import none  # noqa: F401
+from bayesgam.penalties import wrap_penalty  # noqa: F401
+from bayesgam.penalties import PENALTIES, CONSTRAINTS  # noqa: F401
 
-from pygam.distributions import Distribution  # noqa: F401
-from pygam.distributions import NormalDist  # noqa: F401
-from pygam.distributions import BinomialDist  # noqa: F401
-from pygam.distributions import PoissonDist  # noqa: F401
-from pygam.distributions import GammaDist  # noqa: F401
-from pygam.distributions import InvGaussDist  # noqa: F401
-from pygam.distributions import DISTRIBUTIONS  # noqa: F401
+from bayesgam.distributions import Distribution  # noqa: F401
+from bayesgam.distributions import NormalDist  # noqa: F401
+from bayesgam.distributions import BinomialDist  # noqa: F401
+from bayesgam.distributions import PoissonDist  # noqa: F401
+from bayesgam.distributions import GammaDist  # noqa: F401
+from bayesgam.distributions import InvGaussDist  # noqa: F401
+from bayesgam.distributions import DISTRIBUTIONS  # noqa: F401
 
-from pygam.links import Link  # noqa: F401
-from pygam.links import IdentityLink  # noqa: F401
-from pygam.links import LogitLink  # noqa: F401
-from pygam.links import LogLink  # noqa: F401
-from pygam.links import InverseLink  # noqa: F401
-from pygam.links import InvSquaredLink  # noqa: F401
-from pygam.links import LINKS  # noqa: F401
+from bayesgam.links import Link  # noqa: F401
+from bayesgam.links import IdentityLink  # noqa: F401
+from bayesgam.links import LogitLink  # noqa: F401
+from bayesgam.links import LogLink  # noqa: F401
+from bayesgam.links import InverseLink  # noqa: F401
+from bayesgam.links import InvSquaredLink  # noqa: F401
+from bayesgam.links import LINKS  # noqa: F401
 
-from pygam.callbacks import CallBack  # noqa: F401
-from pygam.callbacks import Deviance  # noqa: F401
-from pygam.callbacks import Diffs  # noqa: F401
-from pygam.callbacks import Accuracy  # noqa: F401
-from pygam.callbacks import Coef  # noqa: F401
-from pygam.callbacks import validate_callback  # noqa: F401
-from pygam.callbacks import CALLBACKS  # noqa: F401
+from bayesgam.callbacks import CallBack  # noqa: F401
+from bayesgam.callbacks import Deviance  # noqa: F401
+from bayesgam.callbacks import Diffs  # noqa: F401
+from bayesgam.callbacks import Accuracy  # noqa: F401
+from bayesgam.callbacks import Coef  # noqa: F401
+from bayesgam.callbacks import validate_callback  # noqa: F401
+from bayesgam.callbacks import CALLBACKS  # noqa: F401
 
-from pygam.utils import check_y
-from pygam.utils import check_X
-from pygam.utils import check_X_y
-from pygam.utils import make_2d
-from pygam.utils import flatten
-from pygam.utils import check_array
-from pygam.utils import check_lengths
-from pygam.utils import load_diagonal
-from pygam.utils import TablePrinter
-from pygam.utils import space_row
-from pygam.utils import sig_code
-from pygam.utils import b_spline_basis  # noqa: F401
-from pygam.utils import combine
-from pygam.utils import cholesky
-from pygam.utils import check_param
-from pygam.utils import isiterable
-from pygam.utils import NotPositiveDefiniteError
-from pygam.utils import OptimizationError
+from bayesgam.utils import check_y
+from bayesgam.utils import check_X
+from bayesgam.utils import check_X_y
+from bayesgam.utils import make_2d
+from bayesgam.utils import flatten
+from bayesgam.utils import check_array
+from bayesgam.utils import check_lengths
+from bayesgam.utils import load_diagonal
+from bayesgam.utils import TablePrinter
+from bayesgam.utils import space_row
+from bayesgam.utils import sig_code
+from bayesgam.utils import b_spline_basis  # noqa: F401
+from bayesgam.utils import combine
+from bayesgam.utils import cholesky
+from bayesgam.utils import check_param
+from bayesgam.utils import isiterable
+from bayesgam.utils import NotPositiveDefiniteError
+from bayesgam.utils import OptimizationError
 
-from pygam.terms import Term  # noqa: F401
-from pygam.terms import Intercept, intercept  # noqa: F401
-from pygam.terms import LinearTerm, l  # noqa: F401
-from pygam.terms import SplineTerm, s  # noqa: F401
-from pygam.terms import FactorTerm, f  # noqa: F401
-from pygam.terms import TensorTerm, te  # noqa: F401
-from pygam.terms import TermList  # noqa: F401
-from pygam.terms import MetaTermMixin  # noqa: F401
+from bayesgam.terms import Term  # noqa: F401
+from bayesgam.terms import Intercept, intercept  # noqa: F401
+from bayesgam.terms import LinearTerm, l  # noqa: F401
+from bayesgam.terms import SplineTerm, s  # noqa: F401
+from bayesgam.terms import FactorTerm, f  # noqa: F401
+from bayesgam.terms import TensorTerm, te  # noqa: F401
+from bayesgam.terms import TermList  # noqa: F401
+from bayesgam.terms import MetaTermMixin  # noqa: F401
 
 
 EPS = np.finfo(np.float64).eps  # machine epsilon
@@ -118,7 +118,7 @@ class GAM(Core, MetaTermMixin):
         Tolerance for stopping criteria.
 
     verbose : bool, optional
-        whether to show pyGAM warnings.
+        whether to show BayesGAM warnings.
 
     Attributes
     ----------
@@ -2417,7 +2417,7 @@ class LinearGAM(GAM):
         Tolerance for stopping criteria.
 
     verbose : bool, optional
-        whether to show pyGAM warnings.
+        whether to show BayesGAM warnings.
 
     Attributes
     ----------
@@ -2554,7 +2554,7 @@ class LogisticGAM(GAM):
         Tolerance for stopping criteria.
 
     verbose : bool, optional
-        whether to show pyGAM warnings.
+        whether to show BayesGAM warnings.
 
     Attributes
     ----------
@@ -2733,7 +2733,7 @@ class PoissonGAM(GAM):
         Tolerance for stopping criteria.
 
     verbose : bool, optional
-        whether to show pyGAM warnings.
+        whether to show BayesGAM warnings.
 
     Attributes
     ----------
@@ -3077,7 +3077,7 @@ class GammaGAM(GAM):
 
     If you need to use the inverse link function, simply construct a custom GAM:
 
-    >>> from pygam import GAM
+    >>> from bayesgam import GAM
     >>> gam = GAM(distribution='gamma', link='inverse')
 
 
@@ -3109,7 +3109,7 @@ class GammaGAM(GAM):
         Tolerance for stopping criteria.
 
     verbose : bool, optional
-        whether to show pyGAM warnings.
+        whether to show BayesGAM warnings.
 
     Attributes
     ----------
@@ -3196,7 +3196,7 @@ class InvGaussGAM(GAM):
 
     If you need to use the inverse squared link function, simply construct a custom GAM:
 
-    >>> from pygam import GAM
+    >>> from bayesgam import GAM
     >>> gam = GAM(distribution='inv_gauss', link='inv_squared')
 
 
@@ -3228,7 +3228,7 @@ class InvGaussGAM(GAM):
         Tolerance for stopping criteria.
 
     verbose : bool, optional
-        whether to show pyGAM warnings.
+        whether to show BayesGAM warnings.
 
     Attributes
     ----------
@@ -3337,7 +3337,7 @@ class ExpectileGAM(GAM):
         Tolerance for stopping criteria.
 
     verbose : bool, optional
-        whether to show pyGAM warnings.
+        whether to show BayesGAM warnings.
 
     Attributes
     ----------

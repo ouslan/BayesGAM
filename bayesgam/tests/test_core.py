@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pygam.core import Core, nice_repr
+from bayesgam.core import Core, nice_repr
 
 
 def test_Core_class():

@@ -5,7 +5,7 @@ from functools import wraps
 
 import numpy as np
 
-from pygam.core import Core
+from bayesgam.core import Core
 
 
 def validate_callback_data(method):

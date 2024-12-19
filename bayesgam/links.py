@@ -3,7 +3,7 @@ Link functions
 """
 import numpy as np
 
-from pygam.core import Core
+from bayesgam.core import Core
 
 
 class Link(Core):

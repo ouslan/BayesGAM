@@ -2,7 +2,7 @@
 
 import pytest
 
-from pygam import (
+from bayesgam import (
     GAM,
     LinearGAM,
     LogisticGAM,

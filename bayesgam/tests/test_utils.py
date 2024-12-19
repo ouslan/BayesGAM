@@ -6,8 +6,8 @@ from mock import patch
 import numpy as np
 import pytest
 
-from pygam import LinearGAM, LogisticGAM, s, f
-from pygam.utils import check_X, check_y, check_X_y, sig_code, check_iterable_depth
+from bayesgam import LinearGAM, LogisticGAM, s, f
+from bayesgam.utils import check_X, check_y, check_X_y, sig_code, check_iterable_depth
 
 
 # TODO check dtypes works as expected
@@ -227,13 +227,13 @@ def test_iterable_depth():
 
 def test_no_SKSPIMPORT(mcycle_X_y):
     """make sure our module work with and without scikit-sparse"""
-    from pygam.utils import SKSPIMPORT
+    from bayesgam.utils import SKSPIMPORT
 
     if SKSPIMPORT:
         with patch(
-            'pygam.utils.SKSPIMPORT', new=False
+            'bayesgam.utils.SKSPIMPORT', new=False
         ) as SKSPIMPORT_patch:  # noqa: E501, F841
-            from pygam.utils import SKSPIMPORT
+            from bayesgam.utils import SKSPIMPORT
 
             assert SKSPIMPORT is False
 
