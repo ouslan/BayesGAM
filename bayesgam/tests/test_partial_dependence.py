@@ -2,7 +2,7 @@
 
 import pytest
 
-from pygam import LinearGAM
+from bayesgam import LinearGAM
 
 
 class TestPartialDepencence(object):

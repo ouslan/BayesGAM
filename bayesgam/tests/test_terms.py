@@ -4,9 +4,9 @@ from copy import deepcopy
 import numpy as np
 import pytest
 
-from pygam import LinearGAM, PoissonGAM
+from bayesgam import LinearGAM, PoissonGAM
 
-from pygam.terms import (
+from bayesgam.terms import (
     Term,
     Intercept,
     SplineTerm,
@@ -19,7 +19,7 @@ from pygam.terms import (
     l,
     f,
 )
-from pygam.utils import flatten
+from bayesgam.utils import flatten
 
 
 @pytest.fixture
@@ -302,7 +302,7 @@ def test_tensor_composite_constraints_equal_penalties():
     """check that the composite constraint matrix for a tensor term
     is equivalent to a penalty matrix under the correct conditions
     """
-    from pygam.penalties import derivative
+    from bayesgam.penalties import derivative
 
     def der1(*args, **kwargs):
         kwargs.update({'derivative': 1})

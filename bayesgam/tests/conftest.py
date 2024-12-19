@@ -2,14 +2,14 @@
 
 import pytest
 
-from pygam import (
+from bayesgam import (
     LinearGAM,
     PoissonGAM,
     s,
     f,
     te,
 )
-from pygam.datasets import (
+from bayesgam.datasets import (
     mcycle,
     coal,
     faithful,

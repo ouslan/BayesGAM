@@ -3,7 +3,7 @@ Core classes
 """
 import numpy as np
 
-from pygam.utils import round_to_n_decimal_places, flatten
+from bayesgam.utils import round_to_n_decimal_places, flatten
 
 
 def nice_repr(

@@ -2,16 +2,16 @@
 
 import numpy as np
 
-from pygam import LinearGAM, s
+from bayesgam import LinearGAM, s
 
-from pygam.penalties import derivative
-from pygam.penalties import l2
-from pygam.penalties import monotonic_inc
-from pygam.penalties import monotonic_dec
-from pygam.penalties import convex
-from pygam.penalties import concave
-from pygam.penalties import none
-from pygam.penalties import wrap_penalty
+from bayesgam.penalties import derivative
+from bayesgam.penalties import l2
+from bayesgam.penalties import monotonic_inc
+from bayesgam.penalties import monotonic_dec
+from bayesgam.penalties import convex
+from bayesgam.penalties import concave
+from bayesgam.penalties import none
+from bayesgam.penalties import wrap_penalty
 
 
 def test_single_spline_penalty():

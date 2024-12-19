@@ -10,8 +10,8 @@ from copy import deepcopy
 import numpy as np
 import scipy as sp
 
-from pygam.core import Core, nice_repr
-from pygam.utils import (
+from bayesgam.core import Core, nice_repr
+from bayesgam.utils import (
     isiterable,
     check_param,
     flatten,
@@ -19,7 +19,7 @@ from pygam.utils import (
     b_spline_basis,
     tensor_product,
 )
-from pygam.penalties import PENALTIES, CONSTRAINTS
+from bayesgam.penalties import PENALTIES, CONSTRAINTS
 
 
 class Term(Core):

@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from pygam.datasets import cake
-from pygam.datasets import coal
-from pygam.datasets import default
-from pygam.datasets import faithful
-from pygam.datasets import hepatitis
-from pygam.datasets import mcycle
-from pygam.datasets import trees
-from pygam.datasets import chicago
-from pygam.datasets import toy_interaction
+from bayesgam.datasets import cake
+from bayesgam.datasets import coal
+from bayesgam.datasets import default
+from bayesgam.datasets import faithful
+from bayesgam.datasets import hepatitis
+from bayesgam.datasets import mcycle
+from bayesgam.datasets import trees
+from bayesgam.datasets import chicago
+from bayesgam.datasets import toy_interaction
 
 
 def _test_dataset(dataset_loader, n_rows, n_columns_X, n_columns_df, n_rows_X=None):
