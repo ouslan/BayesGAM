@@ -1,4 +1,7 @@
 site_name: BayesGAM
-site_url: https://ouslan.github.io/BayesGAM
+
+nav:
+  - Home: index.md
+
 theme:
-  name: material
+  name: 'material'
