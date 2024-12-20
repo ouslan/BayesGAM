@@ -4,7 +4,7 @@ on:
     branches:
       - master
       - main
-      - 2-mkdocs
+      - v1
 permissions:
   contents: write
 jobs:

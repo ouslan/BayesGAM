@@ -4,9 +4,8 @@ generate some plots for the pyGAM repo
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
-
-from pygam import GAM, LinearGAM, PoissonGAM, LogisticGAM, ExpectileGAM, s, f, te
-from pygam.datasets import (
+from bayesgam import GAM, LinearGAM, PoissonGAM, LogisticGAM, ExpectileGAM, s, f, te
+from bayesgam.datasets import (
     hepatitis,
     wage,
     faithful,
@@ -38,15 +37,15 @@ def gen_basis_fns():
 
     plt.figure()
     fig, ax = plt.subplots(2, 1)
-    ax[0].plot(XX, gam._modelmat(XX, term=0).A)
+    ax[0].plot(XX, gam._modelmat(XX, term=0).toarray())
     ax[0].set_title('b-Spline Basis Functions')
 
     ax[1].scatter(X, y, facecolor='gray', edgecolors='none')
-    ax[1].plot(XX, gam._modelmat(XX).A * gam.coef_)
+    ax[1].plot(XX, gam._modelmat(XX).toarray() * gam.coef_)
     ax[1].plot(XX, gam.predict(XX), 'k')
     ax[1].set_title('Fitted Model')
     fig.tight_layout()
-    plt.savefig('imgs/pygam_basis.png', dpi=300)
+    plt.savefig('docs/assets/bayesgam_basis.png', dpi=300)
 
 
 def cake_data_in_one():
@@ -60,7 +59,7 @@ def cake_data_in_one():
     plt.figure()
     plt.plot(gam.partial_dependence(XX))
     plt.title('LinearGAM')
-    plt.savefig('imgs/pygam_cake_data.png', dpi=300)
+    plt.savefig('docs/assets/bayesgam_cake_data.png', dpi=300)
 
 
 def faithful_data_poisson():
@@ -72,7 +71,7 @@ def faithful_data_poisson():
 
     plt.plot(X, gam.predict(X), color='r')
     plt.title('Best Lambda: {0:.2f}'.format(gam.lam[0][0]))
-    plt.savefig('imgs/pygam_poisson.png', dpi=300)
+    plt.savefig('docs/assets/bayesgam_poisson.png', dpi=300)
 
 
 def single_data_linear():
@@ -86,7 +85,7 @@ def single_data_linear():
     plt.scatter(X, y, facecolor='gray', edgecolors='none')
     plt.plot(X, gam.predict(X), color='r')
     plt.title('Best Lambda: {0:.2f}'.format(gam.lam))
-    plt.savefig('imgs/pygam_single_pred_linear.png', dpi=300)
+    plt.savefig('docs/assets/bayesgam_single_pred_linear.png', dpi=300)
 
 
 def mcycle_data_linear():
@@ -102,7 +101,7 @@ def mcycle_data_linear():
     plt.plot(XX, gam.prediction_intervals(XX, width=0.95), color='b', ls='--')
     plt.title('95% prediction interval')
 
-    plt.savefig('imgs/pygam_mcycle_data_linear.png', dpi=300)
+    plt.savefig('docs/assets/bayesgam_mcycle_data_linear.png', dpi=300)
 
     m = X.min()
     M = X.max()
@@ -117,7 +116,7 @@ def mcycle_data_linear():
     plt.plot(Xr, gam.confidence_intervals(Xr), color='b', ls='--')
     plt.plot(X, gam.confidence_intervals(X), color='r', ls='--')
 
-    plt.savefig('imgs/pygam_mcycle_data_extrapolation.png', dpi=300)
+    plt.savefig('docs/assets/bayesgam_mcycle_data_extrapolation.png', dpi=300)
 
 
 def wage_data_linear():
@@ -144,7 +143,7 @@ def wage_data_linear():
         ax.set_title(titles[i])
 
     fig.tight_layout()
-    plt.savefig('imgs/pygam_wage_data_linear.png', dpi=300)
+    plt.savefig('docs/assets/bayesgam_wage_data_linear.png', dpi=300)
 
 
 def default_data_logistic():
@@ -170,7 +169,7 @@ def default_data_logistic():
         ax.set_title(titles[i])
 
     fig.tight_layout()
-    plt.savefig('imgs/pygam_default_data_logistic.png', dpi=300)
+    plt.savefig('docs/assets/bayesgam_default_data_logistic.png', dpi=300)
 
 
 def constraints():
@@ -189,7 +188,7 @@ def constraints():
     ax[1].legend()
 
     fig.tight_layout()
-    plt.savefig('imgs/pygam_constraints.png', dpi=300)
+    plt.savefig('docs/assets/bayesgam_constraints.png', dpi=300)
 
 
 def trees_data_custom():
@@ -201,7 +200,7 @@ def trees_data_custom():
     plt.scatter(y, gam.predict(X))
     plt.xlabel('true volume')
     plt.ylabel('predicted volume')
-    plt.savefig('imgs/pygam_custom.png', dpi=300)
+    plt.savefig('docs/assets/bayesgam_custom.png', dpi=300)
 
 
 # def gen_single_data(n=200):
@@ -224,14 +223,14 @@ def trees_data_custom():
 #     plt.plot(x, lgam.predict_proba(x), label='GAM probability', color='r')
 #     plt.legend(prop=fontP, bbox_to_anchor=(1.1, 1.05))
 #     plt.title('LogisticGAM on quadratic log-odds data')
-#     plt.savefig('imgs/pygam_single.png', dpi=300)
+#     plt.savefig('docs/assets/pygam_single.png', dpi=300)
 #
 #     # single pred
 #     plt.figure()
 #     plt.scatter(x, y, facecolor='None')
 #     plt.plot(x, lgam.predict_proba(x), color='r')
 #     plt.title('Accuracy: {}'.format(lgam.accuracy(X=x, y=y)))
-#     plt.savefig('imgs/pygam_single_pred.png', dpi=300)
+#     plt.savefig('docs/assets/pygam_single_pred.png', dpi=300)
 #
 #     # UBRE Gridsearch
 #     scores = []
@@ -249,7 +248,7 @@ def trees_data_custom():
 #     plt.ylabel('UBRE')
 #     plt.title('Best $\lambda$: %.3f'% lams[best])
 #
-#     plt.savefig('imgs/pygam_lambda_gridsearch.png', dpi=300)
+#     plt.savefig('docs/assets/pygam_lambda_gridsearch.png', dpi=300)
 
 
 def gen_multi_data(n=5000):
@@ -267,11 +266,11 @@ def gen_multi_data(n=5000):
             continue
         plt.plot(lgam.partial_dependence(term=i))
 
-    plt.savefig('imgs/pygam_multi_pdep.png', dpi=300)
+    plt.savefig('docs/assets/bayesgam_multi_pdep.png', dpi=300)
 
     plt.figure()
     plt.plot(lgam.logs_['deviance'])
-    plt.savefig('imgs/pygam_multi_deviance.png', dpi=300)
+    plt.savefig('docs/assets/bayesgam_multi_deviance.png', dpi=300)
 
 
 def gen_tensor_data():
@@ -291,7 +290,7 @@ def gen_tensor_data():
     ax.plot_surface(XX[0], XX[1], Z, cmap='viridis')
     ax.set_axis_off()
     fig.tight_layout()
-    plt.savefig('imgs/pygam_tensor.png', transparent=True, dpi=300)
+    plt.savefig('docs/assets/bayesgam_tensor.png', transparent=True, dpi=300)
 
 
 def chicago_tensor():
@@ -309,7 +308,7 @@ def chicago_tensor():
     ax.plot_surface(XX[0], XX[1], Z, cmap='viridis')
     fig.tight_layout()
 
-    plt.savefig('imgs/pygam_chicago_tensor.png', dpi=300)
+    plt.savefig('docs/assets/bayesgam_chicago_tensor.png', dpi=300)
 
 
 def expectiles():
@@ -343,7 +342,7 @@ def expectiles():
     plt.legend()
     fig.tight_layout()
 
-    plt.savefig('imgs/pygam_expectiles.png', dpi=300)
+    plt.savefig('docs/assets/bayesgam_expectiles.png', dpi=300)
 
 
 if __name__ == '__main__':

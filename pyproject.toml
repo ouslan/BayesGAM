@@ -13,4 +13,10 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [dependency-groups]
-dev = ["mock>=5.1.0", "pandas>=2.2.3", "pytest>=8.3.4"]
+dev = [
+    "matplotlib>=3.10.0",
+    "mkdocs-material>=9.5.49",
+    "mock>=5.1.0",
+    "pandas>=2.2.3",
+    "pytest>=8.3.4",
+]
