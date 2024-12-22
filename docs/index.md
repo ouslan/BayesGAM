@@ -56,7 +56,7 @@ Servén D., Brummitt C. (2018). pyGAM: Generalized Additive Models in Python. Ze
 
 ## Contact
 
-To report an issue with BayesGAM, please use the [issue tracker](https://github.com/dswah/BayesGAM/issues).
+To report an issue with BayesGAM, please use the [issue tracker](https://github.com/ouslan/BayesGAM/issues).
 
 ## License
 
@@ -64,19 +64,7 @@ GNU General Public License v3.0
 
 ## Getting Started
 
-If you're new to BayesGAM, read [the Tour of BayesGAM](notebooks/tour_of_bayesgam.ipynb) for an introduction to the package.
-
-## Table of Contents
-
-```{toctree}
-:maxdepth: 2
-:caption: Contents:
-
-notebooks/quick_start.ipynb
-notebooks/tour_of_bayesgam.ipynb
-api/api
-dev-api/api
-```
+If you're new to BayesGAM, read [the Tour of BayesGAM](tour.md) for an introduction to the package.
 
 ## Indices and Tables
 

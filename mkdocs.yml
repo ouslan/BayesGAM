@@ -2,7 +2,12 @@ site_name: BayesGAM
 
 nav:
   - Welcome: index.md
-  - A Tour of pyGAM: tour.md
+  - Getting Started: start.md
+  - Distributions: 
+    - distributions/index.md
+    - Normal: distributions/normal.md
+distribution:
+  - tmp: tmp.md
 
 markdown_extensions:
   - attr_list
@@ -10,6 +15,9 @@ markdown_extensions:
   - pymdownx.blocks.caption
   - pymdownx.arithmatex:
       generic: true
+
+repo_url: https://github.com/ouslan/BayesGAM
+repo_name: ouslan/BayesGAM
 
 extra_javascript:
   - js/katex.js
@@ -22,3 +30,15 @@ extra_css:
 theme:
   name: 'material'
   logo: assets/bayesgam_tensor.png
+  features:
+    - navigation.tabs
+
+plugins:
+  - git-revision-date-localized:
+      enabled: !ENV [mkdocs, false]
+      enable_creation_date: true
+      fallback_to_build_date: true
+  - git-committers:
+      enabled: !ENV [mkdocs, false]
+      repository: ouslan/BayesGAM
+      branch: v1

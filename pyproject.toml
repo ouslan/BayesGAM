@@ -7,6 +7,9 @@ license = "Apache-2.0"
 requires-python = ">=3.12"
 dependencies = ["numpy>=2.2.0", "progressbar2>=4.5.0", "scipy>=1.14.1"]
 authors = [{ name = "Daniel Serven" }, { name = "Charlie Brummitt" }]
+maintainers = [
+  { name = "Alejandro Ouslan", email = "alejandro.ouslan@upr.edu" },
+]
 
 [build-system]
 requires = ["hatchling"]
@@ -14,9 +17,11 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
-    "matplotlib>=3.10.0",
-    "mkdocs-material>=9.5.49",
-    "mock>=5.1.0",
-    "pandas>=2.2.3",
-    "pytest>=8.3.4",
+  "matplotlib>=3.10.0",
+  "mkdocs-git-committers-plugin-2>=2.4.1",
+  "mkdocs-git-revision-date-localized-plugin>=1.3.0",
+  "mkdocs-material>=9.5.49",
+  "mock>=5.1.0",
+  "pandas>=2.2.3",
+  "pytest>=8.3.4",
 ]
