@@ -2,12 +2,25 @@ site_name: BayesGAM
 
 nav:
   - Welcome: index.md
-  - Getting Started: start.md
+  - Getting Started: getting-started.md
   - Distributions: 
-    - distributions/index.md
     - Normal: distributions/normal.md
-distribution:
-  - tmp: tmp.md
+    - Binomial: distributions/binomial.md
+    - Poisson: distributions/poisson.md
+    - Gamma: distributions/gamma.md
+    - Inverse Gauss: distributions/gauss.md
+  - Links:
+    - Identity: links/identity.md
+    - Logit: links/logit.md
+    - Inverse: links/inverse.md
+    - Log: links/log.md
+    - Inverse Squared: links/inverse-squared.md
+  - Terms:
+    - Linear: terms/linear.md
+    - Spline: terms/spline.md
+    - Factor: terms/factor.md
+    - Tensor: terms/tensor.md
+    - Intercept: terms/intercept.md
 
 markdown_extensions:
   - attr_list
