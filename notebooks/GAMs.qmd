@@ -12,7 +12,10 @@ os.chdir("..")
 ```
 
 ```{python}
-from src.bayesgam.bayesgam import FormulaModel
+from src.bayesgam.bayesgam import GAM
+from pygam import LinearGAM, s, f
+from pygam.datasets import wage
+import pandas as pd
 import numpy as np
 ```
 
@@ -23,6 +26,12 @@ X = np.array([0, 1, 2, 3])
 Y = np.array([3, 2, 1, 0])
 
 # Instantiate the model with a formula
-model = FormulaModel('f(X[0]) + f(X[1]) + f(X[3])')
+model = GAM('f(X[0]) + f(X[1]) + f(X[3])')
 model.fit(X,Y)
+```
+
+
+```{python}
+X, y = wage()
+
 ```

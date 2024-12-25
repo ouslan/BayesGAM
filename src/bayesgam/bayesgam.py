@@ -1,7 +1,7 @@
 import numpy as np
 
 class GAM():
-    def __init__(self, formula:str, distribution:str, link:str):
+    def __init__(self, formula:str, distribution:str="normal", link:str="normal"):
         self.formula = formula 
         self.distribution = distribution
         self.link = link

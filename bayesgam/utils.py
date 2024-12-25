@@ -367,7 +367,6 @@ def check_X_y(X, y):
             "found X: {} and y: {}".format(X.shape, y.shape)
         )
 
-
 def check_lengths(*arrays):
     """
     tool to ensure input and output data have the same number of samples
@@ -383,7 +382,6 @@ def check_lengths(*arrays):
     lengths = [len(array) for array in arrays]
     if len(np.unique(lengths)) > 1:
         raise ValueError("Inconsistent data lengths: {}".format(lengths))
-
 
 def check_param(param, param_name, dtype, constraint=None, iterable=True, max_depth=2):
     """
