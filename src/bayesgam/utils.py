@@ -1,8 +1,8 @@
 from numpy.linalg import LinAlgError
 import numpy as np
 import scipy as sp
-import sys
 import warnings
+import numbers
 
 def cholesky(A:np.ndarray) -> np.ndarray:
     """
@@ -336,150 +336,229 @@ def b_spline_basis(
     edge_knots,
     n_splines=20,
     spline_order=3,
-    sparse=True,  # noqa: F811
+    sparse=True,
     periodic=True,
     verbose=True,
 ):
     """
-    tool to generate b-spline basis using vectorized De Boor recursion
-    the basis functions extrapolate linearly past the end-knots.
+    Generate B-spline basis functions using vectorized De Boor recursion.
+    The basis functions extrapolate linearly past the end-knots.
 
     Parameters
     ----------
-    x : array-like, with ndims == 1.
-    edge_knots : array-like contaning locations of the 2 edge knots.
-    n_splines : int. number of splines to generate. must be >= spline_order+1
-                default: 20
-    spline_order : int. order of spline basis to create
-                   default: 3
-    sparse : boolean. whether to return a sparse basis matrix or not.
-             default: True
-    periodic: bool, default: True
-        whether to repeat basis functions (True) or linearly extrapolate (False).
-    verbose : bool, default: True
-        whether to print warnings
+    x : array-like, 1D
+        The data points at which to evaluate the B-spline basis functions.
+    
+    edge_knots : array-like
+        Locations of the 2 edge knots (start and end values).
+    
+    n_splines : int, optional, default=20
+        Number of splines to generate. Must be >= spline_order + 1.
+    
+    spline_order : int, optional, default=3
+        Order of the spline basis to create.
+    
+    sparse : bool, optional, default=True
+        Whether to return a sparse basis matrix or not.
+    
+    periodic : bool, optional, default=True
+        Whether to repeat basis functions (True) or linearly extrapolate (False).
+    
+    verbose : bool, optional, default=True
+        Whether to print warnings.
 
     Returns
     -------
-    basis : sparse csc matrix or array containing b-spline basis functions
-            with shape (len(x), n_splines)
+    basis : sparse csc matrix or array
+        B-spline basis functions with shape (len(x), n_splines).
     """
-    if np.ravel(x).ndim != 1:
-        raise ValueError("Data must be 1-D, but found {}".format(np.ravel(x).ndim))
-
-    if (n_splines < 1) or not isinstance(n_splines, numbers.Integral):
-        raise ValueError("n_splines must be int >= 1")
-
-    if (spline_order < 0) or not isinstance(spline_order, numbers.Integral):
-        raise ValueError("spline_order must be int >= 1")
-
+    
+    # Ensure x is a 1D array
+    x = np.ravel(x)
+    if x.ndim != 1:
+        raise ValueError(f"Data must be 1-D, but found {x.ndim} dimensions.")
+    
+    # Validate the number of splines and spline order
+    if not isinstance(n_splines, numbers.Integral) or n_splines < 1:
+        raise ValueError("n_splines must be an integer >= 1.")
+    
+    if not isinstance(spline_order, numbers.Integral) or spline_order < 0:
+        raise ValueError("spline_order must be an integer >= 1.")
+    
     if n_splines < spline_order + 1:
-        raise ValueError(
-            "n_splines must be >= spline_order + 1. "
-            "found: n_splines = {} and spline_order = {}".format(
-                n_splines, spline_order
-            )
-        )
+        raise ValueError(f"n_splines must be >= spline_order + 1. Found n_splines = {n_splines} and spline_order = {spline_order}.")
 
     if n_splines == 0 and verbose:
-        warnings.warn(
-            "Requested 1 spline. This is equivalent to " "fitting an intercept",
-            stacklevel=2,
-        )
+        warnings.warn("Requested 1 spline, which is equivalent to fitting an intercept.", stacklevel=2)
 
+    # Adjust n_splines if periodic
     n_splines += spline_order * periodic
 
-    # rescale edge_knots to [0,1], and generate boundary knots
-    edge_knots = np.sort(deepcopy(edge_knots))
+    # Rescale edge_knots to [0, 1] and generate boundary knots
+    edge_knots = np.sort(edge_knots)
     offset = edge_knots[0]
     scale = edge_knots[-1] - edge_knots[0]
-    if scale == 0:
+
+    if scale == 0: # Avoid division by zero
         scale = 1
-    boundary_knots = np.linspace(0, 1, 1 + n_splines - spline_order)
+
+    boundary_knots = np.linspace(0, 1, n_splines - spline_order + 1)
     diff = np.diff(boundary_knots[:2])[0]
 
-    # rescale x as well
-    x = (np.ravel(deepcopy(x)) - offset) / scale
+    # Rescale x to [0, 1]
+    x = (x - offset) / scale
 
-    # wrap periodic values
+    # Wrap x for periodic values
     if periodic:
         x = x % (1 + 1e-9)
 
-    # append 0 and 1 in order to get derivatives for extrapolation
+    # Append 0 and 1 to handle boundary conditions
     x = np.r_[x, 0.0, 1.0]
 
-    # determine extrapolation indices
+    # Identify extrapolation indices
     x_extrapolte_l = x < 0
     x_extrapolte_r = x > 1
-    x_interpolate = ~(x_extrapolte_r + x_extrapolte_l)
+    x_interpolate = ~(x_extrapolte_r | x_extrapolte_l)
 
-    # formatting
+    # Ensure x is 2D for matrix operations
     x = np.atleast_2d(x).T
 
-    # augment knots
+    # Augment knots for spline calculation
     aug = np.arange(1, spline_order + 1) * diff
     aug_knots = np.r_[-aug[::-1], boundary_knots, 1 + aug]
-    aug_knots[-1] += 1e-9  # want last knot inclusive
+    aug_knots[-1] += 1e-9  # Ensure last knot is inclusive
 
-    # prepare Haar Basis
+    # Prepare the Haar basis (step function representation)
     bases = (x >= aug_knots[:-1]).astype(int) * (x < aug_knots[1:]).astype(int)
-    bases[-1] = bases[-2][::-1]  # force symmetric bases at 0 and 1
+    bases[-1] = bases[-2][::-1]  # Force symmetry at boundaries
 
-    # do recursion from Hastie et al. vectorized
+    # Perform De Boor recursion (vectorized)
     maxi = len(aug_knots) - 1
     for m in range(2, spline_order + 2):
         maxi -= 1
 
-        # left sub-basis
-        num = x - aug_knots[:maxi]
-        num *= bases[:, :maxi]
+        # Store previous bases to use for extrapolation
+        prev_bases = bases.copy()
+
+        # Left sub-basis
+        num = (x - aug_knots[:maxi]) * bases[:, :maxi]
         denom = aug_knots[m - 1 : maxi + m - 1] - aug_knots[:maxi]
         left = num / denom
 
-        # right sub-basis
+        # Right sub-basis
         num = (aug_knots[m : maxi + m] - x) * bases[:, 1 : maxi + 1]
         denom = aug_knots[m : maxi + m] - aug_knots[1 : maxi + 1]
         right = num / denom
 
-        # track previous bases and update
-        prev_bases = bases[-2:]
+        # Combine left and right bases
         bases = left + right
 
+    # Adjust for periodicity, if required
     if periodic and spline_order > 0:
-        # make spline domain periodic
-        bases[:, :spline_order] = np.max(
-            [bases[:, :spline_order], bases[:, -spline_order:]], axis=0
-        )
-        # remove extra splines used only for ensuring correct domain
-        bases = bases[:, :-spline_order]
+        bases[:, :spline_order] = np.maximum(bases[:, :spline_order], bases[:, -spline_order:])
+        bases = bases[:, :-spline_order]  # Remove extra splines used for the periodic domain
 
-    # extrapolate
-    # since we have repeated end-knots, only the last 2 basis functions are
-    # non-zero at the end-knots, and they have equal and opposite gradient.
+    # Extrapolate for values outside the [0, 1] interval
     if (any(x_extrapolte_r) or any(x_extrapolte_l)) and spline_order > 0:
         bases[~x_interpolate] = 0.0
 
-        denom = aug_knots[spline_order:-1] - aug_knots[: -spline_order - 1]
+        # Use prev_bases to handle extrapolation properly
+        denom = aug_knots[spline_order:-1] - aug_knots[:-spline_order - 1]
         left = prev_bases[:, :-1] / denom
 
-        denom = aug_knots[spline_order + 1 :] - aug_knots[1:-spline_order]
+        denom = aug_knots[spline_order + 1:] - aug_knots[1:-spline_order]
         right = prev_bases[:, 1:] / denom
 
-        grads = (spline_order) * (left - right)
+        grads = spline_order * (left - right)
 
+        # Handle left extrapolation
         if any(x_extrapolte_l):
             val = grads[0] * x[x_extrapolte_l] + bases[-2]
             bases[x_extrapolte_l] = val
+
+        # Handle right extrapolation
         if any(x_extrapolte_r):
             val = grads[1] * (x[x_extrapolte_r] - 1) + bases[-1]
             bases[x_extrapolte_r] = val
-    # get rid of the added values at 0, and 1
+
+
+    # Remove the artificially appended values at the boundaries (0 and 1)
     bases = bases[:-2]
 
+    # Return sparse matrix if requested
     if sparse:
-        return sp.sparse.csc_matrix(bases)
+        return sp.csc_matrix(bases)
 
     return bases
+
+def ylogydu(y, u):
+    """
+    tool to give desired output for the limit as y -> 0, which is 0
+
+    Parameters
+    ----------
+    y : array-like of len(n)
+    u : array-like of len(n)
+
+    Returns
+    -------
+    np.array len(n)
+    """
+    mask = np.atleast_1d(y) != 0.0
+    out = np.zeros_like(u)
+    out[mask] = y[mask] * np.log(y[mask] / u[mask])
+    return out
+
+def flatten(iterable):
+    """convenience tool to flatten any nested iterable
+
+    example:
+
+        flatten([[[],[4]],[[[5,[6,7, []]]]]])
+        >>> [4, 5, 6, 7]
+
+        flatten('hello')
+        >>> 'hello'
+
+    Parameters
+    ----------
+    iterable
+
+    Returns
+    -------
+    flattened object
+    """
+    if isiterable(iterable):
+        flat = []
+        for item in list(iterable):
+            item = flatten(item)
+            if not isiterable(item):
+                item = [item]
+            flat += item
+        return flat
+    else:
+        return iterable
+
+def isiterable(obj, reject_string=True):
+    """convenience tool to detect if something is iterable.
+    in python3, strings count as iterables to we have the option to exclude them
+
+    Parameters:
+    -----------
+    obj : object to analyse
+    reject_string : bool, whether to ignore strings
+
+    Returns:
+    --------
+    bool, if the object is itereable.
+    """
+
+    iterable = hasattr(obj, "__len__")
+
+    if reject_string:
+        iterable = iterable and not isinstance(obj, str)
+
+    return iterable
 
 def tensor_product(a, b, reshape=True):
     """
@@ -510,12 +589,10 @@ def tensor_product(a, b, reshape=True):
     or
         (n, m_a, m_b) otherwise
     """
-    assert (
-        a.ndim == 2
-    ), "matrix a must be 2-dimensional, but found {} dimensions".format(a.ndim)
-    assert (
-        b.ndim == 2
-    ), "matrix b must be 2-dimensional, but found {} dimensions".format(b.ndim)
+    if a.ndim == 2:
+        raise ValueError(f"matrix a must be 2-dimensional, but found {a.ndim} dimensions")
+    if b.ndim == 2:
+        raise ValueError(f"matrix b must be 2-dimensional, but found {b.ndim} dimensions")
 
     na, ma = a.shape
     nb, mb = b.shape
@@ -529,29 +606,45 @@ def tensor_product(a, b, reshape=True):
     if sp.sparse.issparse(b):
         b = b.toarray()
 
-    tensor = a[..., :, None] * b[..., None, :]
+    tensor = np.tensordot(a, b, axes=0)
 
     if reshape:
         return tensor.reshape(na, ma * mb)
 
     return tensor
 
+def get_link_domain(link, dist):
+    """
+    tool to identify the domain of a given monotonic link function
 
-# Credit to Hugh Bothwell from
-# http://stackoverflow.com/questions/5084743/how-to-print-pretty-string-output-in-python
-class TablePrinter(object):
-    "Print a list of dicts as a table"
+    Parameters
+    ----------
+    link : Link object
+    dist : Distribution object
+
+    Returns
+    -------
+    domain : list of length 2, representing the interval of the domain.
+    """
+    domain = np.array([-np.inf, -1, 0, 1, np.inf])
+    domain = domain[~np.isnan(link.link(domain, dist))]
+    return [domain[0], domain[-1]]
+
+class TablePrinter:
+    """Print a list of dictionaries as a table."""
 
     def __init__(self, fmt, sep=" ", ul=None):
         """
-        @param fmt: list of tuple(heading, key, width)
-                        heading: str, column label
-                        key: dictionary key to value to print
-                        width: int, column width in chars
-        @param sep: string, separation between columns
-        @param ul: string, character to underline column label, or None for no underlining
-        """  # noqa: E501
-        super(TablePrinter, self).__init__()
+        Initialize the TablePrinter with format specifications.
+
+        :param fmt: List of tuples, each containing:
+            - heading (str): Column label
+            - key (str): Dictionary key to retrieve value to print
+            - width (int): Column width in characters
+
+        :param sep: String, separation between columns (default is a space)
+        :param ul: String, character to underline column label, or None for no underlining
+        """
         self.fmt = str(sep).join(
             "{lb}{0}:{1}{rb}".format(key, width, lb="{", rb="}")
             for heading, key, width in fmt
@@ -561,19 +654,30 @@ class TablePrinter(object):
         self.width = {key: width for heading, key, width in fmt}
 
     def row(self, data):
-        if sys.version_info < (3,):
-            return self.fmt.format(
-                **{k: str(data.get(k, ""))[:w] for k, w in self.width.iteritems()}
-            )
-        else:
-            return self.fmt.format(
-                **{k: str(data.get(k, ""))[:w] for k, w in self.width.items()}
-            )
+        """
+        Generate a formatted row for a given data dictionary.
 
-    def __call__(self, dataList):
-        _r = self.row
-        res = [_r(data) for data in dataList]
-        res.insert(0, _r(self.head))
+        :param data: Dictionary containing the row data
+        :return: Formatted row string
+        """
+        return self.fmt.format(
+            **{k: str(data.get(k, ""))[:w] for k, w in self.width.items()}
+        )
+
+    def __call__(self, data_list):
+        """
+        Format a list of dictionaries as a table.
+
+        :param data_list: List of dictionaries containing the table data
+        :return: Formatted table as a string
+        """
+        formatted_rows = [self.row(data) for data in data_list]
+
+        # Insert the header row at the top
+        formatted_rows.insert(0, self.row(self.head))
+
+        # Insert the underlining row, if applicable
         if self.ul:
-            res.insert(1, _r(self.ul))
-        return "\n".join(res)
+            formatted_rows.insert(1, self.row(self.ul))
+
+        return "\n".join(formatted_rows)

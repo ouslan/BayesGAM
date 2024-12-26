@@ -74,10 +74,9 @@ def derivative(n:int, derivative:int=2, periodic:bool=False) -> sp.sparse.csc_ma
     if n == 1:
         # no derivative for constant functions
         return sp.sparse.csc_matrix(0.0)
-    D = sparse_diff(
-        sp.sparse.identity(
-            n + 2 * derivative * periodic).tocsc(), n=derivative
-    ).tolil()
+
+    D_1 = sp.sparse.identity(n + 2 * derivative * periodic).tocsc()
+    D = sparse_diff(D_1, n=derivative).tolil()
 
     if periodic:
         # wrap penalty
@@ -92,7 +91,7 @@ def derivative(n:int, derivative:int=2, periodic:bool=False) -> sp.sparse.csc_ma
         D = D[derivative:-derivative, derivative:-derivative]
     return D.dot(D.T).tocsc()
 
-def apply_periodic_penalty(penalty_func, n:int, coef:int, derivative:int=2):
+def apply_periodic_penalty(penalty_func, n:int, coef:np.ndarray, derivative:int=2):
     """
     Applies the penalty function for periodic features.
 
@@ -114,7 +113,7 @@ def apply_periodic_penalty(penalty_func, n:int, coef:int, derivative:int=2):
     """
     return penalty_func(n, coef, derivative=derivative, periodic=True)
 
-def periodic(n:np.ndarray, coef:np.ndarray, derivative:int=2, penalty_func=None):
+def periodic(n:int, coef:np.ndarray, derivative:int=2, penalty_func=None):
     """
     Wraps a penalty function to calculate the penalty for periodic features.
 

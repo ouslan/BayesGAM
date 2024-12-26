@@ -1,0 +1,32 @@
+---
+title: "GAM development"
+format:
+  html:
+    code-fold: true
+jupyter: python3
+---
+
+```{python}
+import os
+os.chdir("..")
+```
+
+```{python}
+import pandas as pd
+import numpy as np
+```
+
+```{python}
+array = np.array([[1, 2, 3], [4, 5, 6]])
+nd = array.ndim
+slice1 = [slice(None)] * nd
+slice2 = [slice(None)] * nd
+slice1[1] = slice(1, None)
+slice2[1] = slice(None, -1)
+slice1 = tuple(slice1)
+slice2 = tuple(slice2)
+```
+
+```{python}
+A = sparse_diff(array, n - 1, axis=axis)
+```
