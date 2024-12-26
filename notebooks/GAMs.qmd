@@ -12,9 +12,7 @@ os.chdir("..")
 ```
 
 ```{python}
-from src.bayesgam.bayesgam import GAM
-from pygam import LinearGAM, s, f
-from pygam.datasets import wage
+import scipy as sp
 import pandas as pd
 import numpy as np
 ```
