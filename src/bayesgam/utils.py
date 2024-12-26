@@ -491,6 +491,33 @@ def b_spline_basis(
 
     return bases
 
+def check_iterable_depth(obj, max_depth=100):
+    """find the maximum depth of nesting of the iterable
+
+    Parameters
+    ----------
+    obj : iterable
+    max_depth : int, default: 100
+        maximum depth beyond which we stop counting
+
+    Returns
+    -------
+    int
+    """
+
+    def find_iterables(obj):
+        iterables = []
+        for item in obj:
+            if isiterable(item):
+                iterables += list(item)
+        return iterables
+
+    depth = 0
+    while (depth < max_depth) and isiterable(obj) and len(obj) > 0:
+        depth += 1
+        obj = find_iterables(obj)
+    return depth
+
 def ylogydu(y, u):
     """
     tool to give desired output for the limit as y -> 0, which is 0
