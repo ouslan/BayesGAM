@@ -28,5 +28,92 @@ slice2 = tuple(slice2)
 ```
 
 ```{python}
-A = sparse_diff(array, n - 1, axis=axis)
+print("LinearGAM")
+pritn(f"{}")
+
+```
+
+```{python}
+def print_summary(
+  distribution:str,
+  link_function:str, 
+  num_samples:int, 
+  log_likelihood:float, 
+  aic:float, 
+  aicc:float,
+  gcv:float, 
+  scale:float, 
+  dof:float,
+  pseudo_r_squared:float, 
+  features:float,
+  terms:list
+) -> str
+    
+    output = []
+    output.append("LinearGAM")
+    output.append(f"{'='*45} {'='*45}")
+    output.append(f"Distribution: {distribution:>31} Effective DoF: {dof:>30}")
+    output.append(f"Link Function: {link_function:>30} Log Likelihood: {log_likelihood:>29}")
+    output.append(f"Number of Samples: {num_samples:>26} AIC: {aic:>40}")
+    output.append(f"{'':>45} AICc: {aicc:>39}")
+    output.append(f"{'':>45} GCV: {gcv:>40}")
+    output.append(f"{'':>45} Scale: {scale:>38}")
+    output.append(f"{'':>45} Pseudo R-Squared: {pseudo_r_squared:>27}")
+    output.append(f"{'='*45} {'='*45}")
+    
+    # Add feature functions and details header
+    output.append(f"{'Feature Function':<30}{'Lambda':<16}{'Rank':<10}{'EDoF':<10}{'P > x':<15}{'Sig. Code':>10}")
+    output.append(f"{'='*29} {'='*15} {'='*9} {'='*9} {'='*16} {'='*8}") 
+    
+    # Iterate over the terms and add their details to the output
+    for term in terms:
+        feature_name = term[0]
+        lambda_value = term[1]
+        rank = term[2]
+        edof = term[3]
+        p_value = term[4]
+        sig_code = '*' if p_value < 0.01 else ''
+        
+        output.append(f"{feature_name:<30}{lambda_value:<16}{rank:<10}{edof:<10}{p_value:<15}{sig_code:>10}")
+    
+    output.append(f"{'='*45} {'='*45}")
+    output.append("Significance codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1")
+
+    # Display Important warnings
+    output.append("\n\033[1;33mWARNING:\033[0m Fitting splines and a linear function to a feature introduces a model\n"
+                  f"{' '*8} identifiability problem.")
+    output.append("\033[1;33mWARNING:\033[0m p-values calculated in this manner behave correctly for un-penalized models\n"
+                  f"{' '*8} or models with known smoothing parameters")
+    output.append("but when smoothing parameters have been estimated, the p-values are typically lower than they should be, meaning that the tests reject the null too readily.")
+
+    return "\n".join(output)
+
+# Example of calling the function with test data and getting the string result
+terms = [
+            ('s(0)', 15.8489, 20, 6.9, 5.52e-03),  # Example data for feature 1
+            ('s(1)', 15.8489, 20, 8.5, 1.11e-16),  # Example data for feature 2
+            ('f(2)', 15.8489, 5, 3.8, 1.11e-16),   # Example data for feature 3
+            ('intercept', 0, 1, 0.0, 1.11e-16)     # Example data for intercept
+        ]
+result = print_summary(
+    distribution="NormalDist", 
+    link_function="IdentityLink", 
+    num_samples=50000, 
+    log_likelihood="-2317525.6219", 
+    aic=4635094.9336, 
+    aicc=4635094.9536, 
+    gcv=0.01, 
+    dof=1245,
+    scale=0.01, 
+    pseudo_r_squared=0.9976,
+    terms=terms
+)
+
+# You can print the result or save it to a variable as needed
+print(result)
+
+```
+
+```{python}
+len("==========================================================================================================")
 ```

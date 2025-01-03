@@ -1,25 +1,9 @@
 from bayesgam.core import Core
 import numpy as np
 
-import numpy as np
-
-class Link(Core):
-    def __init__(self, name=None):
-        """
-        creates an instance of a Link object
-
-        Parameters
-        ----------
-        name : str, default: None
-
-        Returns
-        -------
-        self
-        """
-        super(Link, self).__init__(name=name)
 
 
-class IdentityLink(Link):
+class IdentityLink():
     def __init__(self):
         """
         creates an instance of an IdentityLink object
@@ -32,25 +16,9 @@ class IdentityLink(Link):
         -------
         self
         """
-        super(IdentityLink, self).__init__(name='identity')
+        self.name = "identity"
 
-    def link(self, mu, dist):
-        """
-        glm link function
-        this is useful for going from mu to the linear prediction
-
-        Parameters
-        ----------
-        mu : array-like of legth n
-        dist : Distribution instance
-
-        Returns
-        -------
-        lp : np.array of length n
-        """
-        return mu
-
-    def mu(self, lp, dist):
+    def mu(self, lp):
         """
         glm mean function, ie inverse of link function
         this is useful for going from the linear prediction to mu
@@ -81,8 +49,7 @@ class IdentityLink(Link):
         """
         return np.ones_like(mu)
 
-
-class LogitLink(Link):
+class LogitLink():
     def __init__(self):
         """
         creates an instance of a LogitLink object
@@ -145,8 +112,7 @@ class LogitLink(Link):
         """
         return dist.levels / (mu * (dist.levels - mu))
 
-
-class LogLink(Link):
+class LogLink():
     def __init__(self):
         """
         creates an instance of a LogitLink object
@@ -208,8 +174,7 @@ class LogLink(Link):
         """
         return 1.0 / mu
 
-
-class InverseLink(Link):
+class InverseLink():
     def __init__(self):
         """
         creates an instance of a InverseLink object
@@ -271,8 +236,7 @@ class InverseLink(Link):
         """
         return -1 * mu**-2.0
 
-
-class InvSquaredLink(Link):
+class InvSquaredLink():
     def __init__(self):
         """
         creates an instance of an InverseLink object
